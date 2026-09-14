@@ -1,24 +1,30 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './style.css';
+import { getMoviesInProgrammazione } from './services/movies.service';
+import { renderMovieCard } from './components/movieCard';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const app = document.querySelector<HTMLDivElement>('#app')!;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+async function renderHome() {
+  app.innerHTML = `
+    <section class="movies-section">
+      <h2 class="section-title">Film in programmazione</h2>
+      <div class="movies-grid" id="movies-grid">
+        <p>Caricamento film...</p>
+      </div>
+    </section>
+  `;
+
+  const grid = document.querySelector<HTMLDivElement>('#movies-grid')!;
+
+  try {
+    const movies = await getMoviesInProgrammazione();
+    grid.innerHTML = movies.length
+      ? movies.map(renderMovieCard).join('')
+      : '<p>Nessun film in programmazione al momento.</p>';
+  } catch (error) {
+    console.error(error);
+    grid.innerHTML = '<p>⚠️ Errore nel caricamento dei film. Riprova più tardi.</p>';
+  }
+}
+
+renderHome();
