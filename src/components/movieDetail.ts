@@ -19,10 +19,24 @@ function formatDate(isoString: string): { dateStr: string; timeStr: string } {
   return { dateStr, timeStr };
 }
 
-export function renderShowtimeCard(showtime: Showtime): string {
-  const { dateStr, timeStr } = formatDate(showtime.start_time);
-  const totalSeats = showtime.room?.capacity ?? 250;
-  const availableSeats = totalSeats - (showtime.booked_seats ?? 0);
+export function renderShowtimeCard(screening: any): string {
+  // Formattiamo la data a partire da screening.starts_at
+  const dateObj = new Date(screening.starts_at);
+  
+  const dateStr = dateObj.toLocaleDateString('it-IT', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short'
+  });
+
+  const timeStr = dateObj.toLocaleTimeString('it-IT', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  const roomName = screening.hall?.name || 'Sala Standard';
+  const totalCapacity = screening.hall?.capacity || 150;
+  const availableSeats = screening.available_seats ?? 0;
   const isAvailable = availableSeats > 0;
 
   return `
@@ -33,8 +47,8 @@ export function renderShowtimeCard(showtime: Showtime): string {
           <span class="showtime-time">${timeStr}</span>
         </div>
         <div class="showtime-details">
-          <h4 class="room-title">${showtime.room?.name ?? 'Sala Cinema'}</h4>
-          <p class="seats-count">${availableSeats} / ${totalSeats} posti disponibili</p>
+          <h4 class="room-title">${roomName}</h4>
+          <p class="seats-count">${availableSeats} / ${totalCapacity} posti disponibili</p>
         </div>
       </div>
       <div class="showtime-action">

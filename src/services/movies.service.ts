@@ -22,21 +22,17 @@ export async function getMovieById(id: number): Promise<MovieDetail> {
   return response.json();
 }
 
-export async function getMovieShowtimes(filmId: number): Promise<Showtime[]> {
+export async function getMovieShowtimes(filmId: number): Promise<any[]> {
   try {
-    // Proviamo l'endpoint primario
-    const response = await fetch(`${API_BASE_URL}/films/${filmId}/showtimes`);
-
+    const response = await fetch(`${API_BASE_URL}/films/${filmId}/screenings`);
     if (!response.ok) {
-      // Qualora l'API accetti un query param tipo /showtimes?filmId=...
-      const altResponse = await fetch(`${API_BASE_URL}/showtimes?filmId=${filmId}`);
-      if (!altResponse.ok) return [];
-      return altResponse.json();
+      console.error(`Errore nel caricamento degli spettacoli per il film ${filmId}: ${response.status}`);
+      return [];
     }
-
-    return response.json();
+    const screenings = await response.json();
+    return screenings;
   } catch (error) {
-    console.warn("Impossibile recuperare gli spettacoli:", error);
-    return []; // Ritorna un array vuoto anziché far fallire la pagina
+    console.error("Errore di rete durante il recupero degli spettacoli:", error);
+    return [];
   }
 }
