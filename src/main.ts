@@ -4,9 +4,24 @@ import { renderBookingForm, renderBookingConfirmation } from './components/booki
 import { renderMovieCard } from './components/movieCard';
 import { renderMovieDetail } from './components/movieDetail';
 
+export function setNavTitle(title: string) {
+  const titleEl = document.getElementById('nav-page-title');
+  if (titleEl) {
+    titleEl.textContent = title;
+  }
+}
+
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
+// Click sul logo in alto per tornare in Home in qualsiasi momento
+document.querySelector('.logo-link')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  renderHome();
+});
+
 async function renderHome() {
+  setNavTitle('HOME'); // <--- Imposta il titolo nell'header
+
   app.innerHTML = `
     <section class="movies-section">
       <h2 class="section-title">Film in programmazione</h2>
@@ -42,13 +57,12 @@ async function renderHome() {
 }
 
 async function renderDetailPage(movieId: number) {
+  setNavTitle('SCHEDA FILM'); // <--- Imposta il titolo nell'header
+
   app.innerHTML = '<p class="loading">Caricamento scheda film...</p>';
 
   try {
-    // Recuperiamo prima il film
     const movie = await getMovieById(movieId);
-
-    // Recuperiamo gli spettacoli (gestito per non bloccare la pagina se vuoto/404)
     const showtimes = await getMovieShowtimes(movieId);
 
     app.innerHTML = renderMovieDetail(movie, showtimes);
@@ -82,6 +96,8 @@ async function renderDetailPage(movieId: number) {
 }
 
 function renderBookingPage(movieId: number, screeningId: number) {
+  setNavTitle('PRENOTAZIONE'); // <--- Imposta il titolo nell'header
+
   app.innerHTML = renderBookingForm();
 
   document.querySelector('#back-to-film-btn')?.addEventListener('click', () => {
@@ -119,6 +135,8 @@ function renderBookingPage(movieId: number, screeningId: number) {
 }
 
 function renderBookingSuccess() {
+  setNavTitle('PRENOTAZIONE'); // <--- Mantiene il titolo aggiornato anche alla schermata finale
+
   app.innerHTML = renderBookingConfirmation();
 
   document.querySelector('#back-home-btn')?.addEventListener('click', () => {

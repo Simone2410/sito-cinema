@@ -55,22 +55,19 @@ export function renderBookingConfirmation(): string {
     <div class="booking-page">
       <div class="booking-card">
         <div class="booking-icon" style="display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 1.2rem;">
-          <svg width="52" height="55" viewBox="0 0 40 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="56" height="56" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="cm-gradient-confirm" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#FFFFFF" />
-                <stop offset="65%" stop-color="#4FC3F7" />
-                <stop offset="100%" stop-color="#2F8FD1" />
+              <linearGradient id="green-grad-confirm" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#66BB6A" />
+                <stop offset="100%" stop-color="#2E7D32" />
               </linearGradient>
             </defs>
 
-            <!-- Icona Fotogramma + Play (Identica a quella del logo in alto) -->
-            <rect x="5" y="6" width="30" height="30" rx="8" stroke="url(#cm-gradient-confirm)" stroke-width="2.5" fill="rgba(79, 195, 247, 0.05)" />
-            <rect x="9" y="9" width="3" height="3" rx="1" fill="url(#cm-gradient-confirm)" />
-            <rect x="28" y="9" width="3" height="3" rx="1" fill="url(#cm-gradient-confirm)" />
-            <rect x="9" y="30" width="3" height="3" rx="1" fill="url(#cm-gradient-confirm)" />
-            <rect x="28" y="30" width="3" height="3" rx="1" fill="url(#cm-gradient-confirm)" />
-            <polygon points="17,15 27,21 17,27" fill="url(#cm-gradient-confirm)" />
+            <!-- Cerchio esterno verde sfumato -->
+            <circle cx="24" cy="24" r="20" fill="rgba(76, 175, 80, 0.12)" stroke="url(#green-grad-confirm)" stroke-width="3" />
+            
+            <!-- Segno di spunta (Checkmark) -->
+            <path d="M14 24L21 31L34 17" stroke="url(#green-grad-confirm)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
 

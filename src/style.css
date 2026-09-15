@@ -567,3 +567,16 @@ main#app {
 .btn-confirm-booking:hover:not(:disabled) {
   filter: brightness(1.1);
 }
+
+@media (max-width: 480px) {
+  .site-header {
+    padding: 0.8rem 1rem;
+  }
+  .logo-link svg {
+    width: 170px;
+    height: auto;
+  }
+  .site-nav h2 {
+    font-size: 0.85rem;
+  }
+}
