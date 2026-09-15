@@ -36,3 +36,21 @@ export async function getMovieShowtimes(filmId: number): Promise<any[]> {
     return [];
   }
 }
+
+import type { BookingRequest, Booking } from '../types/movie';
+
+export async function createBooking(screeningId: number, data: BookingRequest): Promise<Booking> {
+  const response = await fetch(`${API_BASE_URL}/screenings/${screeningId}/bookings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => null);
+    const message = errorBody?.error ?? `Errore nella prenotazione (status ${response.status})`;
+    throw new Error(message);
+  }
+
+  return response.json();
+}

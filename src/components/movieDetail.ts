@@ -39,7 +39,7 @@ export function renderShowtimeCard(screening: any): string {
   const availableSeats = screening.available_seats ?? 0;
   const isAvailable = availableSeats > 0;
 
-  return `
+    return `
     <div class="showtime-card">
       <div class="showtime-info">
         <div class="showtime-time-box">
@@ -55,6 +55,11 @@ export function renderShowtimeCard(screening: any): string {
         <span class="status-badge ${isAvailable ? 'available' : 'sold-out'}">
           ${isAvailable ? 'DISPONIBILE' : 'ESAURITO'}
         </span>
+        ${
+          isAvailable
+            ? `<button class="btn-prenota" data-screening-id="${screening.id}">Prenota</button>`
+            : ''
+        }
       </div>
     </div>
   `;

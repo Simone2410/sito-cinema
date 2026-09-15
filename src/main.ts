@@ -1,5 +1,6 @@
 import './style.css';
-import { getMoviesInProgrammazione, getMovieById, getMovieShowtimes } from './services/movies.service';
+import { getMoviesInProgrammazione, getMovieById, getMovieShowtimes, createBooking } from './services/movies.service';
+import { renderBookingForm, renderBookingConfirmation } from './components/bookingForm';
 import { renderMovieCard } from './components/movieCard';
 import { renderMovieDetail } from './components/movieDetail';
 
@@ -27,7 +28,7 @@ async function renderHome() {
     grid.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       const button = target.closest<HTMLButtonElement>('.movie-cta');
-      
+
       if (button && button.dataset.movieId) {
         const movieId = Number(button.dataset.movieId);
         renderDetailPage(movieId);
@@ -58,6 +59,18 @@ async function renderDetailPage(movieId: number) {
       renderHome();
     });
 
+    // Gestione click sul pulsante "Prenota" di ogni spettacolo
+    const showtimesList = document.querySelector<HTMLDivElement>('.showtimes-list');
+    showtimesList?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const button = target.closest<HTMLButtonElement>('.btn-prenota');
+
+      if (button && button.dataset.screeningId) {
+        const screeningId = Number(button.dataset.screeningId);
+        renderBookingPage(movieId, screeningId);
+      }
+    });
+
   } catch (error) {
     console.error('Errore nel dettaglio film:', error);
     app.innerHTML = `
@@ -66,6 +79,51 @@ async function renderDetailPage(movieId: number) {
     `;
     document.querySelector('#back-btn')?.addEventListener('click', () => renderHome());
   }
+}
+
+function renderBookingPage(movieId: number, screeningId: number) {
+  app.innerHTML = renderBookingForm();
+
+  document.querySelector('#back-to-film-btn')?.addEventListener('click', () => {
+    renderDetailPage(movieId);
+  });
+
+  const form = document.querySelector<HTMLFormElement>('#booking-form')!;
+  const errorEl = document.querySelector<HTMLParagraphElement>('#booking-error')!;
+  const submitBtn = form.querySelector<HTMLButtonElement>('.btn-confirm-booking')!;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorEl.hidden = true;
+
+    const formData = new FormData(form);
+    const payload = {
+      first_name: String(formData.get('first_name') ?? '').trim(),
+      last_name: String(formData.get('last_name') ?? '').trim(),
+      email: String(formData.get('email') ?? '').trim(),
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Invio in corso...';
+
+    try {
+      await createBooking(screeningId, payload);
+      renderBookingSuccess();
+    } catch (error) {
+      errorEl.textContent = error instanceof Error ? error.message : 'Errore nella prenotazione.';
+      errorEl.hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Conferma prenotazione';
+    }
+  });
+}
+
+function renderBookingSuccess() {
+  app.innerHTML = renderBookingConfirmation();
+
+  document.querySelector('#back-home-btn')?.addEventListener('click', () => {
+    renderHome();
+  });
 }
 
 // Avvio iniziale

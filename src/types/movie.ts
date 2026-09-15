@@ -29,3 +29,18 @@ export interface Showtime {
 export interface MovieDetail extends Movie {
   showtimes?: Showtime[];
 }
+
+export interface BookingRequest {
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+export interface Booking {
+  id: number;
+  screening_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  created_at: string;
+}
