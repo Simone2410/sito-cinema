@@ -1,4 +1,4 @@
-import type { Movie, MovieDetail, Showtime } from '../types/movie';
+import type { Movie, MovieDetail } from '../types/movie';
 
 const API_BASE_URL = 'https://its-cinema.vercel.app/api';
 

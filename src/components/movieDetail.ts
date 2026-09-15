@@ -2,22 +2,6 @@ import type { MovieDetail, Showtime } from '../types/movie';
 
 const FALLBACK_POSTER = 'https://placehold.co/300x445?text=No+Poster';
 
-function formatDate(isoString: string): { dateStr: string; timeStr: string } {
-  const date = new Date(isoString);
-  
-  const dateStr = date.toLocaleDateString('it-IT', {
-    weekday: 'short',
-    day: '2-digit',
-    month: 'short'
-  }).toUpperCase();
-
-  const timeStr = date.toLocaleTimeString('it-IT', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-
-  return { dateStr, timeStr };
-}
 
 export function renderShowtimeCard(screening: any): string {
   // Formattiamo la data a partire da screening.starts_at
